@@ -1,0 +1,226 @@
+{% extends 'core/index.html' %}
+{% block title %}{{noticias.titulo}}{% endblock %}
+{% load static %}
+{% block buscador %}
+{% endblock %}
+{% block content %}
+<section class="Contenedor">
+    <div class="seccion-public">
+        <h2 class="seccion-public">{{noticias.seccion}}</h2>
+    </div>
+    <div class="titulo-public">
+        <h1>{{noticias.titulo}}</h1>
+    </div>
+    <div class="portada">
+        <img src="{{noticias.portada.url}}" alt="">
+    </div>
+    {% if noticias.pie_portada != None %}
+    <div class="pie-portada">
+        <p>{{noticias.pie_portada}}</p>
+    </div>
+    {% endif %}
+    <div class="contenido-public">
+        <div class="info-public">
+            <div class="Contenedor linea"></div>
+            <div class="autor-info">
+                <a href="{% url 'perfil' noticias.autor.user.usuario.username %}">
+                    <figure class="autor-info-figure">
+                        <img class="autor-foto" src="{{ noticias.autor.user.profilepic.url }}" alt="">
+                    </figure>
+                </a>
+                <div>
+                    <a href="{% url 'perfil' noticias.autor.user.usuario.username %}">
+                        <h5>{{noticias.autor.nombre_autor}}</h5>
+                    </a>
+                    <p>{{noticias.creacion|date:"d b, Y"}}</p>
+                    <hr>
+                    <div class="redes-autor">
+                        <a href="{{noticias.autor.twitter}}">
+                            <img class="icono_autor" src="{% static 'core/img/twitter.jpg' %}" alt="">
+                        </a>
+                        <a href="{{noticias.autor.ig}}">
+                            <img class="icono_autor" src="{% static 'core/img/insta.jpg' %}" alt="">
+                        </a>
+                        <a href="{{noticias.autor.gmail}}">
+                            <img class="icono_autor" src="{% static 'core/img/gmail.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="publicacion">
+                <p>
+                    {{noticias.cuerpo|safe}}
+                </p>
+                <hr>
+                <div class="recomendados">
+                    <h4 class="recomendados">Recomendados</h4>
+                </div>
+                <br>
+                <div class="Contenedor-recomendados">
+                    {% for i in recomendados %}
+                    {% if i.es_visible %}
+                    <div class="Noticia">
+                        <div class="Contenedor-img">
+                            <a href="{% url 'publicacion' i.slug %}">
+                                <figure>
+                                    <img class="imagen-noticia" src="{{i.portada.url}}">
+                                </figure>
+                            </a>
+                        </div>
+                        <div class="Titulo-noticia">
+                            {% if i.seccion.name == "Actualidad" %}
+                            <a href="{% url 'actualidad' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Crónica"%}
+                            <a href="{% url 'cronica' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Internacionales"%}
+                            <a href="{% url 'internacionales' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Deportes"%}
+                            <a href="{% url 'deportes' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Insólito"%}
+                            <a href="{% url 'insolito' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Tendencias"%}
+                            <a href="{% url 'tendencias' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Farándula"%}
+                            <a href="{% url 'farandula' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% elif i.seccion.name == "Tecnología"%}
+                            <a href="{% url 'tecnologia' %}">
+                                <h2>{{i.seccion}}</h2>
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'publicacion' i.slug %}">
+                                <h1>{{i.titulo}}</h1>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="recomendados">
+                    <h4 class="recomendados">Comentarios</h4>
+                </div>
+                <div class="Contenedor-comentarios">
+                    <form action ="" method="POST">
+                        {% csrf_token %}
+                        <div class="nuevo-comentario">
+                            <div class="autor-info Comentario-info">
+                                <figure class="autor-figure">
+                                    {% if user.is_anonymous %}
+                                        <img class="autor-foto" src="{% static 'core/img/inicio_edit.png' %}" alt="">
+                                    {% else %}
+                                        <img class="autor-foto" src="{{user.perfil.profilepic.url}}" alt="">
+                                    {% endif %}
+                                    
+                                </figure>
+                                <div class="Contenido-comentario">
+                                    <div>
+                                        {{form.as_p}}
+                                    </div>
+                                    <div>
+                                        <input type="submit" class="publicar" value="Publicar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="Comentario">
+                        {% for p in comentarios %}
+                        <div class="autor-info Comentario-info">
+                            <figure class="autor-figure">
+                                <a href="{% url 'perfil' p.autor.usuario.username %}">
+                                    <img class="autor-foto" src="{{p.autor.profilepic.url}}" alt="">
+                                </a>
+                            </figure>
+                            <div class="Contenido comentario">
+                                <div class="info-comentario">
+                                    <div>
+                                        <a href="{% url 'perfil' p.autor.usuario.username %}">
+                                            <h5>{{p.autor}}</h5>
+                                        </a>
+                                    </div>
+                                    <div class="fecha-comentario">
+                                        <p>{{p.creacion|date:"d b, Y"}}</p>
+                                    </div>
+                                    {% if p.autor.id == request.user.perfil.id or user.is_staff%}
+                                    <div>
+                                        <figure class="editar-comentario">
+                                            <a href="{% url 'actualizar_comentario' p.id %}">
+                                                <img class="icono_editar" src="{% static 'core/img/editar.png' %}" alt="">
+                                            </a>
+                                        </figure>
+                                    </div>
+                                    <div>
+                                        <figure class="editar-comentario">
+                                            <a href="#" onclick="confirmarEliminacion({{p.id}})">
+                                                <img class="icono_editar" src="{% static 'core/img/eliminar.png' %}" alt="">
+                                            </a>
+                                        </figure>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class>
+                                    <p style="font-size: medium; text-transform: none;">{{p.comentario}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Contenedor-anuncios">
+            <div class="Anuncio">
+                <figure class="figure-anuncios">
+                    <img class="imagen-noticia"
+                        src="https://laopinion.com/wp-content/uploads/sites/3/2022/01/pexels-scott-spedding-3200651-e1641670978524.jpeg?quality=80&strip=all&w=640"" alt="">
+                </figure>
+            </div>
+            <div class=" similares">
+                    <h4>Similares</h4>
+                    {% for i in similares%}
+                    {% if i.es_visible %}
+                    <div class="similares-Noticia">
+                        <div class="Contenedor-img">
+                            <a href="{% url 'publicacion' i.slug %}">
+                                <figure>
+                                    <img class="imagen-noticia" src="{{i.portada.url}}">
+                                </figure>
+                            </a>
+                        </div>
+                        <div class="Titulo-noticia">
+                            <a href="{% url 'publicacion' i.slug %}">
+                                <h1>{{i.titulo}}</h1>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% if user.is_staff or user.perfil.autor.id == noticias.autor.id %}
+    <div class="Boton-tabla">
+        <a class="Boton Boton-mod" href="{% url 'modificar' noticias.id %}">Modificar</a>
+    </div>
+    {% endif %}
+</section>
+{% block javascript %}
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="{% static 'core/js/confirmar_eliminacion.js' %}"></script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'core/index.html' %}
+{% block title %}Actualidad{% endblock %} 
+{% load static %}
+{% block content %}
+<section class="Contenedor">
+    {% block seccion%}
+    <h2 class="Titulo-seccion">Actualidad</h2>
+    {% endblock %}
+    <div class="">
+        <div class="Contenedor-noticias-seccion">
+            {% for i in noticias %}
+            {% if i.es_visible %}
+            <div class="Noticia">
+                <a href="{% url 'publicacion' i.slug %}">
+                    <figure>
+                        <img class="imagen-noticia" src="{{i.portada.url}}">
+                    </figure>
+                </a>
+                <div class="Titulo-noticia">
+                    <h2>{{i.creacion|date:"d b Y"}}</h2>
+                    <a href="{% url 'publicacion' i.slug %}">
+                        <h1>{{i.titulo}}</h1> 
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

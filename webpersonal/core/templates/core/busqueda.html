@@ -1,0 +1,67 @@
+{% extends 'core/home.html' %}
+{% block title %}Busqueda{% endblock %} 
+{% block portada %}
+{% endblock %}
+{% block body %}
+<div class="Contenedor-body">
+    <div class="Contenedor-noticias">
+        {% for i in noticias%}
+        <div class="Noticia">
+            <a href="{% url 'publicacion' i.slug %}">
+                <figure>
+                    <img class="imagen-noticia" src="{{i.imagen.url}}">
+                </figure>
+            </a>
+            <div class="Titulo-noticia">
+                {% if i.seccion.name == "Actualidad" %}
+                <a href="{% url 'actualidad' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Crónica"%}
+                <a href="{% url 'cronica' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Internacionales"%}
+                <a href="{% url 'internacionales' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Deportes"%}
+                <a href="{% url 'deportes' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Insólito"%}
+                <a href="{% url 'insolito' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Tendencias"%}
+                <a href="{% url 'tendencias' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Farándula"%}
+                <a href="{% url 'farandula' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% elif i.seccion.name == "Tecnología"%}
+                <a href="{% url 'tecnologia' %}">
+                    <h2>{{i.seccion}}</h2>
+                </a>
+                {% endif %}
+                <a href="{% url 'publicacion' i.slug %}">
+                    <h1>{{i.titulo}}</h1>
+                </a>
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+    <div class="Contenedor-anuncios">
+        <div class="Anuncio">
+            <a href="">
+                <figure class="figure-anuncios">
+                    <img class="imagen-noticia"
+                        src="https://laopinion.com/wp-content/uploads/sites/3/2022/01/pexels-scott-spedding-3200651-e1641670978524.jpeg?quality=80&strip=all&w=640">
+                </figure>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

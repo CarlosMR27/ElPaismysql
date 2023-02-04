@@ -1,0 +1,25 @@
+{% extends 'core/index.html' %}
+{% block title %}Modificar Perfil{% endblock %} 
+{% load static %}
+{% block buscador %}
+{% endblock %}
+{% block content %}
+<section class="Seccion">
+    <div class="Contenedor">
+        <h2>Modificar Perfil</h2>
+        <hr>
+        <form method="POST" enctype="multipart/format-data">
+            {% csrf_token %}
+            <table>
+                {{ form.as_p }}
+            </table>
+            {{form.media}}
+            <input type="submit" value="Modificar">
+        </form>
+        <h4>{{ mensaje }}</h4>
+        <div>
+            <a class="Boton Boton-mod" href="{% url 'perfil' user.username %}">Regresar</a>
+        </div>
+</section>
+
+{% endblock %}

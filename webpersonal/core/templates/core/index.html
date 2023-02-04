@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | Elpais</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'core/css/estilos.css' %}">
+    <link rel="icon" href="{% static 'core/img/Elpaislogo.svg' %}" type="svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <br>
+    <header class="Cabecera">
+        <!---Botones-->
+        {% if user.is_authenticated and not user.is_anonymous %}
+        <section class="Contenedor">
+            <div class="hero">
+                <nav class="nav-d">
+                    <figure>
+                        <img src="{{ user.perfil.profilepic.url }}" alt="" class="user-pic" onclick="toggleMenu()">
+                    </figure>
+                    <div class="sub-menu-wrap" id="subMenu">
+                        <div class="sub-menu">
+                            <div class="user-info"> 
+                                <figure>
+                                    <img src="{{ user.perfil.profilepic.url }}" alt="">
+                                </figure>
+                                <h4>{{ user.get_username }}</h4>
+                            </div>
+                            <hr>
+                            {% if user.is_staff or user.perfil.es_editor %}
+                            
+                            {% else %}
+                            <a href="{% url 'perfil' user.username %}" class="sub-menu-link">
+                                <img src="{% static 'core/img/profile.png' %}" alt="">
+                                <p>Ver perfil</p>
+                            </a>
+                            {% endif %}
+                            {% if perms.core.add_noticia and not user.is_staff %}
+                            <a href="{% url 'agregar' %}" class="sub-menu-link">
+                                <img src="{% static 'core/img/nueva_noticia.png' %}" alt="">
+                                <p>Publicar noticia</p>
+                            </a>
+                            {% endif %}
+                            {% if perms.core.view_noticia %}
+                            <a href="{% url 'lista' %}" class="sub-menu-link">
+                                <img src="{% static 'core/img/lista.png' %}" alt="">
+                                <p>Noticias redactadas</p>
+                            </a>
+                            {% endif %}
+                            {% if user.is_staff %}
+                            <a href="/admin/" class="sub-menu-link">
+                                <img src="{% static 'core/img/setting.png' %}" alt="">
+                                <p>Sito del Admin</p>
+                            </a>
+                            {% else %}
+                            <a href="{% url 'editar_user' user.username %}" class="sub-menu-link">
+                                <img src="{% static 'core/img/setting.png' %}" alt="">
+                                <p>Configuración</p>
+                            </a>
+                            {% endif %}
+                            <a href="#" class="sub-menu-link">
+                                <img src="{% static 'core/img/help.png' %}" alt="">
+                                <p>Ayuda y Soporte</p>
+                            </a>
+                            <a href="{% url 'logout' %}" class="sub-menu-link">
+                                <img src="{% static 'core/img/logout.png' %}" alt="">
+                                <p>Cerrar sesión</p>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+        </section>
+        {% else %}
+        <section class="Contenedor Contenido-header">
+            <div>
+                <a class="Boton" href="{% url 'registro' %}">Registrarse</a>
+            </div>
+            <div>
+                <a class="Boton" href="{% url 'login' %}">Iniciar sesión</a>
+            </div>
+        </section>
+        {% endif %}
+    <!---Logo el pais-->
+        <div class="Contenedor logo">
+            <a href="{% url 'home' %}">
+                <img class="logo" src="{% static 'core/img/Elpaislogo.jpg' %}" alt="">
+            </a>
+        </div>
+        <br>
+        <div class="Contenedor Barra">
+            <nav class="Navegacion">
+                <a href="{% url 'actualidad' %}">Actualidad</a>
+                <a href="{% url 'cronica' %}">Crónica</a>
+                <a href="{% url 'internacionales' %}">Internacionales</a>
+                <a href="{% url 'deportes' %}">Deportes</a>
+                <a href="{% url 'insolito' %}">Insólito</a>
+                <a href="{% url 'tendencias' %}">Tendencias</a>
+                <a href="{% url 'farandula' %}">Farándula</a>
+                <a href="{% url 'tecnologia' %}">Tecnología</a>
+            </nav>
+            {% block buscador %}
+            <div class="search" onmouseover="toggleSearch()">
+                <form action="#" method="GET">
+                    <button type="submit">
+                        <i class="fa fa-search" style="font-size: 18px;"></i>
+                    </button>
+                    <input type="text" placeholder=" Buscar noticia" name="buscar" class="search" id="search" onmouseover="toggleSearch()" value="{{request.GET.buscar}}">
+                </form>
+            </div>
+            {% endblock %}
+        </div>
+    </header>
+    <!---Contenido-->
+    {% block content %} 
+    {% endblock %}
+
+    <!---Footer-->
+    <footer>
+        <div class="Contenedor linea">
+            <section class="Contenedor-footer">
+                <div>
+                    <nav class="Navegacion-footer">
+                        <a href="{% url 'contact' %}">Contáctenos -</a>
+                        <a href="{% url 'about' %}">Más sobre nosotros -</a>
+                        <a href="#">Política de privacidad -</a>
+                        <a href="#">Política de cookies -</a>
+                        <a href="#">Condiciones de uso -</a>
+                        <a href="#">Aviso legal -</a> 
+                        <a href="#">Condiciones contratacion</a>
+                    </nav>
+                </div>
+                <div class="redes">
+                    <a class="a" href="https://www.facebook.com/">
+                        <img class="icono_footer" src="{% static 'core/img/facebook.jpg' %}" alt="">
+                    </a>
+                    <a class="a" href="https://twitter.com/">
+                        <img class="icono_footer" src="{% static 'core/img/twitter.jpg' %}" alt="">
+                    </a>
+                    <a class="a" href="https://www.instagram.com/">
+                        <img class="icono_footer" src="{% static 'core/img/insta.jpg' %}" alt="">
+                    </a>
+                </div>
+            </section>
+        </div>
+    </footer>
+    <script>
+        let subMenu = document.getElementById("subMenu");
+        function toggleMenu(){
+            subMenu.classList.toggle("open-menu");    
+        }
+    </script>
+    <script>
+        let search = document.getElementById("search");
+        function toggleSearch(){
+            search.classList.toggle("search-open");    
+        }
+    </script>
+</body>
+</html>

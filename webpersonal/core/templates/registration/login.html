@@ -1,0 +1,51 @@
+<!-- Define que el documento esta bajo el estandar de HTML 5 -->
+<!doctype html>
+
+<!-- Representa la raíz de un documento HTML o XHTML. Todos los demás elementos deben ser descendientes de este elemento. -->
+<html lang="es">
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="">
+        <meta name="author" content="">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Overpass&display=swap" rel="stylesheet">
+        <title>{% block title %}{% endblock %} Login | Elpais</title>
+        {% load static %}
+        <!-- Link hacia el archivo de estilos css -->
+        <link rel="stylesheet" href="{% static 'core/css/login.css' %}">
+        <script type="text/javascript">
+        
+        </script>
+        
+    </head>
+    
+    <body>
+        
+        <div id="contenedor">
+            <div id="central">
+                <div id="login">
+                    <div class="titulo">
+                        Bienvenido
+                    </div>
+                    <form method="post" action ="">   
+                        {% csrf_token %}
+                        {{form}}
+                        <button type="submit" title="Login" name="login">Login</button>                     
+                    </form>
+                    <div class="pie-form">
+                        <a href="#">¿Perdiste tu contraseña?</a>
+                        <a href="{% url 'registro' %}">¿No tienes Cuenta? Registrate</a>
+                    </div>
+                </div>
+                <div class="inferior">
+                    <a href="{% url 'home' %}">Volver</a>
+                </div>
+            </div>
+        </div>  
+    </body>
+</html>
